@@ -1,7 +1,10 @@
 import { NextPage } from 'next';
 import styles from './index.module.scss';
 import { ChangeEvent, useState } from 'react';
-import CountDown from 'components/countDown';
+import CountDown from '@/components/countDown';
+import request from '@/services/fetch';
+import { observer } from 'mobx-react-lite';
+const { message } = require('antd');
 
 interface IProps {
   isShow: boolean;
@@ -15,7 +18,7 @@ const Login: NextPage<IProps> = ({ isShow, onClose }) => {
     verify: '',
   });
   const handleClose = () => {
-    onClose();
+    onClose && onClose();
   };
 
   const handleFormChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,16 +30,44 @@ const Login: NextPage<IProps> = ({ isShow, onClose }) => {
   };
 
   const handleGetVerifyCode = () => {
-    setIsShowVerifyCode(true);
+    if (!form.phone) {
+      message.warning('please input your phone number');
+      return;
+    }
+
+    request
+      .post('/api/user/sendVerifyCode', {
+        to: form?.phone,
+      })
+      .then((res: any) => {
+        if (res?.code === 0) {
+          setIsShowVerifyCode(true);
+        } else {
+          message.error(res?.msg || 'unknown error');
+        }
+      });
   };
 
   const handleLogin = () => {
-    console.log(setForm);
+    request
+      .post('/api/user/login', {
+        ...form,
+        identity_type: 'phone',
+      })
+      .then((res: any) => {
+        if (res?.code === 0) {
+          onClose && onClose();
+        } else {
+          message.error(res?.msg || 'unknown error');
+        }
+      });
   };
 
   const handleOAuthGithub = () => {};
 
-  const handleCountDownEnd = () => {};
+  const handleCountDownEnd = () => {
+    setIsShowVerifyCode(false);
+  };
 
   return isShow ? (
     <div className={styles.loginArea}>
@@ -87,4 +118,4 @@ const Login: NextPage<IProps> = ({ isShow, onClose }) => {
   ) : null;
 };
 
-export default Login;
+export default observer(Login);

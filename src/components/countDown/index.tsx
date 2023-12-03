@@ -13,7 +13,7 @@ const CountDown: NextPage<IProps> = ({ time, onEnd }) => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCount((count) => {
-        if (count === 0) {
+        if (count === 1) {
           clearInterval(timer);
           onEnd && onEnd();
           return count;
