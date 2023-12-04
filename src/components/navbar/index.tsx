@@ -5,23 +5,23 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Login from '@/components/login';
-import { useStore } from '@/store';
-const { Button, Avatar, Dropdown, Menu, message } = require('antd');
 import { LoginOutlined, HomeOutlined } from '@ant-design/icons';
 import request from '@/services/fetch';
-import { observer } from 'mobx-react-lite';
+import { useAuth } from '@/context';
+import { Button, Avatar, Dropdown, message, MenuProps } from 'antd';
 
 const Navbar: NextPage = () => {
-  const store = useStore();
-  const { userId, avatar } = store.user.userInfo;
   const { pathname, push } = useRouter();
   const [isShowLogin, setIsShowLogin] = useState(false);
+  const { user, setUser } = useAuth();
+
+  const { userId, avatar } = user;
 
   const handleGotoEditPage = () => {
     if (userId) {
       push('/editor/new');
     } else {
-      message.warning('请先登录');
+      message.warning('please login first');
     }
   };
 
@@ -40,25 +40,36 @@ const Navbar: NextPage = () => {
   const handleLogout = () => {
     request.post('/api/user/logout').then((res: any) => {
       if (res?.code === 0) {
-        store.user.setUserInfo({});
+        setUser({
+          userId: '',
+          avatar: '',
+          nickname: '',
+        });
       }
     });
   };
 
-  const renderDropDownMenu = () => {
-    return (
-      <Menu>
-        <Menu.Item onClick={handleGotoPersonalPage}>
-          <HomeOutlined />
-          &nbsp; user info
-        </Menu.Item>
-        <Menu.Item onClick={handleLogout}>
-          <LoginOutlined />
-          &nbsp; logout
-        </Menu.Item>
-      </Menu>
-    );
+  const onClick: MenuProps['onClick'] = ({ key }) => {
+    if (key === '1') {
+      handleGotoPersonalPage();
+    }
+    if (key === '2') {
+      handleLogout();
+    }
   };
+
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: 'user info',
+      icon: <HomeOutlined />,
+    },
+    {
+      key: '2',
+      label: 'logout',
+      icon: <LoginOutlined />,
+    },
+  ];
 
   return (
     <div className={styles.navbar}>
@@ -78,7 +89,7 @@ const Navbar: NextPage = () => {
         <Button onClick={handleGotoEditPage}>create article</Button>
         {userId ? (
           <>
-            <Dropdown overlay={renderDropDownMenu()} placement="bottomLeft">
+            <Dropdown menu={{ items, onClick }} placement="bottomLeft">
               <Avatar src={avatar} size={32} />
             </Dropdown>
           </>
@@ -93,4 +104,4 @@ const Navbar: NextPage = () => {
   );
 };
 
-export default observer(Navbar);
+export default Navbar;

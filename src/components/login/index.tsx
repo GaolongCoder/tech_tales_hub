@@ -3,8 +3,8 @@ import styles from './index.module.scss';
 import { ChangeEvent, useState } from 'react';
 import CountDown from '@/components/countDown';
 import request from '@/services/fetch';
-import { observer } from 'mobx-react-lite';
-const { message } = require('antd');
+import { message } from 'antd';
+import { useAuth } from '@/context';
 
 interface IProps {
   isShow: boolean;
@@ -12,6 +12,7 @@ interface IProps {
 }
 
 const Login: NextPage<IProps> = ({ isShow, onClose }) => {
+  const { setUser } = useAuth();
   const [isShowVerifyCode, setIsShowVerifyCode] = useState(false);
   const [form, setForm] = useState({
     phone: '',
@@ -56,6 +57,12 @@ const Login: NextPage<IProps> = ({ isShow, onClose }) => {
       })
       .then((res: any) => {
         if (res?.code === 0) {
+          const user = res.data;
+          setUser({
+            userId: user.id,
+            avatar: user.avatar,
+            nickname: user.nickname,
+          });
           onClose && onClose();
         } else {
           message.error(res?.msg || 'unknown error');
@@ -118,4 +125,4 @@ const Login: NextPage<IProps> = ({ isShow, onClose }) => {
   ) : null;
 };
 
-export default observer(Login);
+export default Login;

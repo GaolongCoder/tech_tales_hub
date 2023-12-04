@@ -37,7 +37,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
       const user = new User();
       user.nickname = `user_${Math.floor(Math.random() * 10000)}`;
-      user.avatar = '/images/default_avatar.png';
+      user.avatar = '/images/default_avatar.jpg';
       user.job = 'empty';
       user.introduce = 'empty';
 

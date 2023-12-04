@@ -1,7 +1,12 @@
-import { NextPage } from 'next';
+import type { NextPage } from 'next';
+import styles from './index.module.scss';
 
 const Footer: NextPage = () => {
-  return <div>footer</div>;
+  return (
+    <div className={styles.footer}>
+      <p>Next.js + React</p>
+    </div>
+  );
 };
 
 export default Footer;

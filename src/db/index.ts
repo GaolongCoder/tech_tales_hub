@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { User, UserAuth } from './entity';
+import { User, UserAuth, Article, Comment, Tag } from './entity';
 
 export const prepareConnection = async () => {
   try {
@@ -11,7 +11,7 @@ export const prepareConnection = async () => {
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [User, UserAuth],
+      entities: [User, UserAuth, Article, Comment, Tag],
       synchronize: false,
       logging: true,
     });

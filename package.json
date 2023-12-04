@@ -9,17 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@uiw/react-md-editor": "3.6.0",
     "antd": "^5.11.5",
     "axios": "^1.6.2",
     "date-fns": "^2.30.0",
     "iron-session": "^8.0.1",
     "js-base64": "^3.7.5",
+    "markdown-to-jsx": "^7.3.2",
+    "markdown-to-txt": "^2.0.1",
     "md5": "^2.3.0",
     "mobx": "^6.12.0",
     "mobx-react-lite": "^4.0.5",
     "mysql2": "^3.6.5",
     "next": "14.0.3",
     "next-cookie": "^2.8.0",
+    "next-remove-imports": "^1.0.12",
     "react": "^18",
     "react-dom": "^18",
     "reflect-metadata": "^0.1.13",
@@ -27,14 +31,21 @@
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
+    "@ant-design/pro-editor": "^0.29.1",
     "@types/md5": "^2.3.5",
     "@types/node": "^20.10.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
+    "kitchen-flow-editor": "^0.3.3",
+    "leva": "^0.9.35",
+    "rc-pagination": "^4.0.1",
+    "rc-picker": "^3.14.6",
+    "rc-util": "^5.38.1",
     "stylelint": "^15.11.0",
     "stylelint-config-standard-scss": "^11.1.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "zustand": "^4.4.7"
   }
 }
